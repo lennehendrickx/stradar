@@ -1,3 +1,24 @@
 micronaut:
   application:
     name: stradar
+
+  security:
+    enabled: true
+    oauth2:
+      enabled: true
+      clients:
+        strava:
+          client-id: ${CLIENT_ID}
+          client-secret: ${CLIENT_SECRET}
+          scopes:
+            - read_all,profile:read_all,activity:read_all
+          authorization:
+            url: https://www.strava.com/oauth/authorize
+          token:
+            url: https://www.strava.com/oauth/token
+            auth-method: client-secret-post
+    token:
+      jwt:
+        enabled: true
+        cookie:
+          enabled: true
