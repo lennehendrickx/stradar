@@ -1,4 +1,6 @@
-package com.stradar;
+package com.stradar.application;
+
+import com.stradar.domain.Photo;
 
 import javax.inject.Singleton;
 import java.util.Arrays;

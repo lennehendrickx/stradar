@@ -1,63 +1,60 @@
-plugins {
-    id "com.github.johnrengelman.shadow" version "5.0.0"
-    id "application"
-    id "net.ltgt.apt-eclipse" version "0.21"
+allprojects {
+    repositories {
+        mavenCentral()
+        maven { url 'https://jcenter.bintray.com' }
+    }
 }
 
-version "0.1"
-group "com.stradar"
-
-repositories {
-    mavenCentral()
-    maven { url "https://jcenter.bintray.com" }
+buildscript {
+    repositories {
+        jcenter()
+        maven { url 'https://plugins.gradle.org/m2/' }
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:5.2.0'
+        classpath 'net.ltgt.gradle:gradle-apt-plugin:0.21'
+    }
 }
 
-configurations {
-    // for dependencies that are needed for development only
-    developmentOnly 
-}
+subprojects {
+    if (it.name.endsWith('-api')){
+        apply plugin: 'java-library'
+    } else {
+        apply plugin: 'application'
+        apply plugin: 'com.github.johnrengelman.shadow'
+        apply plugin: 'net.ltgt.apt-eclipse'
 
-dependencies {
-    annotationProcessor platform("io.micronaut:micronaut-bom:$micronautVersion")
-    annotationProcessor "io.micronaut:micronaut-graal"
-    annotationProcessor "io.micronaut:micronaut-inject-java"
-    annotationProcessor "io.micronaut:micronaut-validation"
-    compileOnly "com.oracle.substratevm:svm"
-    implementation platform("io.micronaut:micronaut-bom:$micronautVersion")
-    implementation "io.micronaut:micronaut-http-client"
-    implementation "io.micronaut:micronaut-inject"
-    implementation "io.micronaut:micronaut-validation"
-    implementation "io.micronaut:micronaut-runtime"
-    implementation "io.micronaut:micronaut-http-server-netty"
-    implementation "io.micronaut.configuration:micronaut-security-oauth2"
-    implementation "io.micronaut:micronaut-security-jwt"
-    implementation "javax.annotation:javax.annotation-api"
-    implementation "io.micronaut:micronaut-views-thymeleaf"
-    runtime "org.thymeleaf:thymeleaf:3.0.11.RELEASE"
-    runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
-    testAnnotationProcessor platform("io.micronaut:micronaut-bom:$micronautVersion")
-    testAnnotationProcessor "io.micronaut:micronaut-inject-java"
-    testImplementation platform("io.micronaut:micronaut-bom:$micronautVersion")
-    testImplementation "org.junit.jupiter:junit-jupiter-api"
-    testImplementation "io.micronaut.test:micronaut-test-junit5"
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
-}
+        shadowJar {
+            mergeServiceFiles()
+        }
 
-test.classpath += configurations.developmentOnly
+        run.jvmArgs('-noverify', '-XX:TieredStopAtLevel=1', '-Dcom.sun.management.jmxremote')
+        tasks.withType(JavaCompile) {
+            options.encoding = "UTF-8"
+            options.compilerArgs.add('-parameters')
+        }
+    }
 
-mainClassName = "com.stradar.Application"
-// use JUnit 5 platform
-test {
-    useJUnitPlatform()
-}
+    dependencies {
+        compileOnly "com.oracle.substratevm:svm"
 
-shadowJar {
-    mergeServiceFiles()
-}
+        annotationProcessor platform("io.micronaut:micronaut-bom:$micronautVersion")
+        annotationProcessor "io.micronaut:micronaut-graal"
+        annotationProcessor "io.micronaut:micronaut-inject-java"
+        annotationProcessor "io.micronaut:micronaut-validation"
 
-run.classpath += configurations.developmentOnly
-run.jvmArgs('-noverify', '-XX:TieredStopAtLevel=1', '-Dcom.sun.management.jmxremote')
-tasks.withType(JavaCompile){
-    options.encoding = "UTF-8"
-    options.compilerArgs.add('-parameters')
+        implementation platform("io.micronaut:micronaut-bom:$micronautVersion")
+        implementation "io.micronaut:micronaut-inject"
+        implementation "io.micronaut:micronaut-validation"
+        implementation "io.micronaut:micronaut-runtime"
+        implementation "javax.annotation:javax.annotation-api"
+
+        testAnnotationProcessor platform("io.micronaut:micronaut-bom:$micronautVersion")
+        testAnnotationProcessor "io.micronaut:micronaut-inject-java"
+
+        testImplementation platform("io.micronaut:micronaut-bom:$micronautVersion")
+        testImplementation "org.junit.jupiter:junit-jupiter-api"
+        testImplementation "io.micronaut.test:micronaut-test-junit5"
+        testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
+    }
 }

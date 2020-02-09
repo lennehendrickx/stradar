@@ -1,5 +1,6 @@
-package com.stradar;
+package com.stradar.infrastructure.rest;
 
+import com.stradar.application.PhotoService;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.security.annotation.Secured;

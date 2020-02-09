@@ -1,0 +1,12 @@
+dependencies {
+    implementation project(":strava-api")
+    implementation "io.micronaut.configuration:micronaut-security-oauth2"
+    implementation "io.micronaut:micronaut-security-jwt"
+    implementation "io.micronaut:micronaut-views-thymeleaf"
+    implementation "io.micronaut:micronaut-http-server-netty"
+
+    runtime "org.thymeleaf:thymeleaf:3.0.11.RELEASE"
+    runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
+}
+
+mainClassName = "com.stradar.Application"

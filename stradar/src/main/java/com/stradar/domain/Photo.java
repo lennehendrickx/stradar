@@ -1,4 +1,4 @@
-package com.stradar;
+package com.stradar.domain;
 
 import io.micronaut.core.annotation.Introspected;
 

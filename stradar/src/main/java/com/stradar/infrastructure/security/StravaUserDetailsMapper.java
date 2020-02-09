@@ -1,4 +1,4 @@
-package com.stradar;
+package com.stradar.infrastructure.security;
 
 import com.stradar.strava.api.StravaApiClient;
 import io.micronaut.security.authentication.UserDetails;
