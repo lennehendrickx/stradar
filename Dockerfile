@@ -1,10 +1,9 @@
-FROM oracle/graalvm-ce:19.3.1-java11 as graalvm
+FROM openjdk:11-jdk-slim as build
 COPY . /home/app/stradar
 WORKDIR /home/app/stradar
-RUN gu install native-image
-RUN native-image --no-server -cp stradar/build/libs/stradar-*-all.jar
+RUN ./gradlew --no-daemon assemble
 
-FROM frolvlad/alpine-glibc
+FROM openjdk:11-jre-slim
 EXPOSE 8080
-COPY --from=graalvm /home/app/stradar .
-ENTRYPOINT ["./stradar"]
+COPY --from=build home/app/stradar/stradar/build/libs/stradar-*-all.jar stradar.jar
+CMD java -noverify ${JAVA_OPTS} -jar stradar.jar
