@@ -15,7 +15,7 @@ test:
 
 publish:
 	heroku container:login
-	docker tag stradar registry.heroku.com/stradar/web
+	docker tag stradar:latest registry.heroku.com/stradar/web
 	docker push registry.heroku.com/stradar/web
 
 release:
