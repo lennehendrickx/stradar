@@ -1,5 +1,7 @@
 package com.stradar.strava.api;
 
+import com.stradar.strava.api.athlete.AthleteClient;
+
 import javax.inject.Singleton;
 
 @Singleton

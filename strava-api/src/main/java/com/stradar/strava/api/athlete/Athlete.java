@@ -1,4 +1,4 @@
-package com.stradar.strava.api;
+package com.stradar.strava.api.athlete;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
