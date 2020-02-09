@@ -5,5 +5,7 @@ RUN ./gradlew --no-daemon assemble
 
 FROM openjdk:11-jre-slim
 EXPOSE 8080
+RUN useradd -m myuser
+USER myuser
 COPY --from=build home/app/stradar/stradar/build/libs/stradar-*-all.jar stradar.jar
 CMD java -noverify ${JAVA_OPTS} -jar stradar.jar

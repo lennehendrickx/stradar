@@ -14,4 +14,10 @@ run:
 test:
 
 publish:
+	heroku container:login
+	docker tag stradar registry.heroku.com/stradar/web
+	docker push registry.heroku.com/stradar/web
+
+release:
+	heroku container:release web -a stradar
 

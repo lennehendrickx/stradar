@@ -1,6 +1,8 @@
 micronaut:
   application:
     name: stradar
+  server:
+    port: ${PORT:8080}
 
   security:
     enabled: true
@@ -22,3 +24,7 @@ micronaut:
         enabled: true
         cookie:
           enabled: true
+        signatures:
+          secret:
+            generator:
+              secret: ${JWT_TOKEN_SECRET}
