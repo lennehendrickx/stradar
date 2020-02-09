@@ -1,16 +1,17 @@
 package com.stradar.strava.api;
 
-import io.micronaut.http.annotation.Get;
-import io.micronaut.http.annotation.Header;
-import io.micronaut.http.client.annotation.Client;
-import io.reactivex.Single;
+import javax.inject.Singleton;
 
-import static io.micronaut.http.HttpHeaders.AUTHORIZATION;
+@Singleton
+public class StravaApiClient {
 
-@Header(name = "User-Agent", value = "Micronaut")
-@Client("https://www.strava.com/api/v3")
-public interface StravaApiClient {
+    private final AthleteClient athleteClient;
 
-    @Get("/athlete")
-    Single<Athlete> getAthlete(@Header(AUTHORIZATION) String authorization);
+    StravaApiClient(AthleteClient athleteClient) {
+        this.athleteClient = athleteClient;
+    }
+
+    public AthleteClient athlete() {
+        return athleteClient;
+    }
 }

@@ -1,5 +1,7 @@
 package com.stradar.infrastructure.security;
 
+import com.stradar.strava.api.Athlete;
+import com.stradar.strava.api.BearerToken;
 import com.stradar.strava.api.StravaApiClient;
 import io.micronaut.security.authentication.UserDetails;
 import io.micronaut.security.oauth2.endpoint.token.response.OauthUserDetailsMapper;
@@ -9,7 +11,7 @@ import org.reactivestreams.Publisher;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import static io.micronaut.http.HttpHeaderValues.AUTHORIZATION_PREFIX_BEARER;
+import static com.stradar.strava.api.BearerToken.bearerToken;
 import static java.util.Collections.singletonList;
 import static java.util.Collections.singletonMap;
 
@@ -25,12 +27,20 @@ class StravaUserDetailsMapper implements OauthUserDetailsMapper {
 
     @Override
     public Publisher<UserDetails> createUserDetails(TokenResponse tokenResponse) {
-        return apiClient.getAthlete(AUTHORIZATION_PREFIX_BEARER + " " + tokenResponse.getAccessToken())
-                .map(athlete -> new UserDetails(
-                        athlete.getUsername(),
-                        singletonList("ROLE_STRAVA"),
-                        singletonMap(
-                                ACCESS_TOKEN_KEY,
-                                tokenResponse.getAccessToken()))).toFlowable();
+        var bearerToken = bearerToken(tokenResponse.getAccessToken());
+        return apiClient
+                .athlete()
+                .currentAthlete(bearerToken)
+                .map(athlete -> toUserDetails(tokenResponse, athlete))
+                .toFlowable();
+    }
+
+    private static UserDetails toUserDetails(TokenResponse tokenResponse, Athlete athlete) {
+        return new UserDetails(
+                athlete.getUsername(),
+                singletonList("ROLE_STRAVA_ATHLETE"),
+                singletonMap(
+                        ACCESS_TOKEN_KEY,
+                        tokenResponse.getAccessToken()));
     }
 }
