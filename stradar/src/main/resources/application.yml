@@ -28,3 +28,7 @@ micronaut:
           secret:
             generator:
               secret: ${JWT_TOKEN_SECRET}
+    endpoints:
+      logout:
+        enabled: true
+        get-allowed: true

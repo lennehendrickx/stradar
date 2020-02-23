@@ -35,6 +35,7 @@ class StravaUserDetailsMapper implements OauthUserDetailsMapper {
     private static UserDetails toUserDetails(TokenResponse tokenResponse, Athlete athlete) {
         return new StravaUserDetails(
                 athlete.getUsername(),
-                tokenResponse.getAccessToken());
+                tokenResponse.getAccessToken(),
+                tokenResponse.getRefreshToken());
     }
 }
