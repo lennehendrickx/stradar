@@ -1,0 +1,50 @@
+plugins {
+    id 'base'
+    id 'com.github.node-gradle.node' version '2.2.3'
+}
+
+node {
+    version = '12.16.1'
+    yarnVersion = '1.22.4'
+    download = true
+}
+
+task packageClient(type: Zip) {
+    dependsOn yarn_build
+    baseName 'stradar-client'
+    extension 'jar'
+    destinationDir file("${projectDir}/build_jar")
+    from('build') {
+        into 'static'
+    }
+}
+
+configurations {
+    clientResources
+}
+
+configurations.default.extendsFrom(configurations.clientResources)
+
+artifacts {
+    clientResources(packageClient.archiveFile) {
+        builtBy packageClient
+        type 'jar'
+    }
+}
+
+assemble.dependsOn packageClient
+
+clean {
+    delete packageClient.archiveFile
+}
+
+yarn_build {
+    inputs.files fileTree('public')
+    inputs.files fileTree('src')
+    inputs.file 'package.json'
+    inputs.file 'yarn.lock'
+    inputs.file 'tsconfig.json'
+    outputs.dir 'build'
+}
+
+

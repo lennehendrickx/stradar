@@ -11,7 +11,6 @@ import static java.util.Map.entry;
 
 public class StravaUserDetails extends UserDetails {
 
-
     private static final String ROLE_STRAVA_ATHLETE = "ROLE_STRAVA_ATHLETE";
 
     public StravaUserDetails(String username, String accessToken, String refreshToken) {

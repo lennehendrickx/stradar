@@ -1,0 +1,38 @@
+apply plugin: 'application'
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'net.ltgt.apt-eclipse'
+
+mainClassName = "com.stradar.Application"
+
+shadowJar {
+    mergeServiceFiles()
+}
+
+dependencies {
+    implementation project(":strava-api")
+
+    implementation "io.micronaut.configuration:micronaut-security-oauth2"
+    implementation "io.micronaut:micronaut-security-jwt"
+    implementation "io.micronaut:micronaut-http-server-netty"
+    implementation "io.micronaut:micronaut-runtime"
+
+    runtimeOnly project(':stradar-client')
+    runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
+
+    annotationProcessor platform("io.micronaut:micronaut-bom:$micronautVersion")
+    annotationProcessor "io.micronaut:micronaut-inject-java"
+    annotationProcessor "io.micronaut:micronaut-validation"
+
+    implementation platform("io.micronaut:micronaut-bom:$micronautVersion")
+    implementation "io.micronaut:micronaut-inject"
+    implementation "io.micronaut:micronaut-validation"
+    implementation "javax.annotation:javax.annotation-api"
+
+    testAnnotationProcessor platform("io.micronaut:micronaut-bom:$micronautVersion")
+    testAnnotationProcessor "io.micronaut:micronaut-inject-java"
+
+    testImplementation platform("io.micronaut:micronaut-bom:$micronautVersion")
+    testImplementation "org.junit.jupiter:junit-jupiter-api"
+    testImplementation "io.micronaut.test:micronaut-test-junit5"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
+}

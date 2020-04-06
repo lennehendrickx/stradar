@@ -1,3 +1,4 @@
 rootProject.name="stradar"
 include ":strava-api",
-        ":stradar"
+        ":stradar-server",
+        ":stradar-client"

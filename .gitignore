@@ -12,3 +12,4 @@ out/
 .settings
 .classpath
 .env
+node_modules/
