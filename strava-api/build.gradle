@@ -1,4 +1,11 @@
 apply plugin: 'java-library'
+apply plugin: "com.diffplug.gradle.spotless"
+
+spotless {
+    java {
+        googleJavaFormat()
+    }
+}
 
 dependencies {
     implementation platform("io.micronaut:micronaut-bom:$micronautVersion")

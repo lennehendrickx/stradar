@@ -1,6 +1,13 @@
 apply plugin: 'application'
 apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'net.ltgt.apt-eclipse'
+apply plugin: "com.diffplug.gradle.spotless"
+
+spotless {
+    java {
+        googleJavaFormat()
+    }
+}
 
 mainClassName = "com.stradar.Application"
 

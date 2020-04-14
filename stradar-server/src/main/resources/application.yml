@@ -3,8 +3,6 @@ micronaut:
     name: stradar
   server:
     port: ${PORT:8080}
-    cors:
-      enabled: true
   router:
     static-resources:
       default:
@@ -38,6 +36,9 @@ micronaut:
         enabled: true
         cookie:
           enabled: true
+          cookie-name: stradar-token
+        generator:
+          access-token-expiration: 21600
         signatures:
           secret:
             generator:

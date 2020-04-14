@@ -8,16 +8,15 @@ import io.micronaut.core.annotation.Introspected;
 @JsonNaming(SnakeCaseStrategy.class)
 public class Activity {
 
-    private String name;
+  private String name;
 
-    public Activity(String name) {
-        this.name = name;
-    }
+  public Activity(String name) {
+    this.name = name;
+  }
 
-    public String getName() {
-        return name;
-    }
-
+  public String getName() {
+    return name;
+  }
 }
 
 /*

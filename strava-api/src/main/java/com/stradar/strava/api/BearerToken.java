@@ -4,18 +4,18 @@ import static io.micronaut.http.HttpHeaderValues.AUTHORIZATION_PREFIX_BEARER;
 
 public class BearerToken {
 
-    private final String accessToken;
+  private final String accessToken;
 
-    private BearerToken(String accessToken) {
-        this.accessToken = accessToken;
-    }
+  private BearerToken(String accessToken) {
+    this.accessToken = accessToken;
+  }
 
-    public static BearerToken bearerToken(String accessToken) {
-        return new BearerToken(accessToken);
-    }
+  public static BearerToken bearerToken(String accessToken) {
+    return new BearerToken(accessToken);
+  }
 
-    @Override
-    public String toString() {
-        return AUTHORIZATION_PREFIX_BEARER + " " + accessToken;
-    }
+  @Override
+  public String toString() {
+    return AUTHORIZATION_PREFIX_BEARER + " " + accessToken;
+  }
 }
