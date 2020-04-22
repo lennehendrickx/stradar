@@ -1,27 +1,19 @@
 import React, {Component} from 'react';
+import {Link, Route, Router, Switch} from 'react-router-dom';
+import {createBrowserHistory} from "history";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-import {stradarClient} from "./StradarClient";
-
-type User = {
-    username: String
-}
+import {stradarClient, User} from "./service/StradarClient";
+import {Home} from "./pages/Home";
+import {Activities} from "./pages/Activities";
 
 type UserState = {
     user?: User
 }
 
-stradarClient.registerInterceptor({
-    onErrorResponse(response: Response): void {
-        console.log(`Intercepted error response with status [${response.status}]`)
-        if (response.status === 401) {
-            stradarClient.authClient.redirectToStravaLogin();
-        }
-    }
-});
-
 export class App extends Component<{}, UserState> {
     readonly state: UserState = {};
+    readonly customHistory = createBrowserHistory();
 
     async componentDidMount() {
         const user = await stradarClient.userClient.user();
@@ -32,14 +24,21 @@ export class App extends Component<{}, UserState> {
         const logoutButton = <a className="App-link" href={'/logout'}>Logout</a>
 
         return (
-            <div className="App">
-                <header className="App-header">
-                    <p>
-                        Current user is {this.state.user ? this.state.user.username : 'Not logged in'}
-                    </p>
-                    {this.state.user ? logoutButton : ''}
-                </header>
-            </div>
+            <Router history={this.customHistory}>
+                <div>
+                    <h2>Welcome {this.state.user ? this.state.user.username : 'unknown user'}</h2>
+                    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+                        <ul className="navbar-nav mr-auto">
+                            <li><Link to={'/'} className="nav-link">Home</Link></li>
+                            <li><Link to={'/activities'} className="nav-link">Activities</Link></li>
+                        </ul>
+                    </nav>
+                    <Switch>
+                        <Route exact path='/' component={Home}/>
+                        <Route path='/activities' component={Activities}/>
+                    </Switch>
+                </div>
+            </Router>
         )
     }
 }
