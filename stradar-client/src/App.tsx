@@ -1,47 +1,47 @@
 import React, {Component} from 'react';
-import logo from './logo.svg';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
+import {stradarClient} from "./StradarClient";
 
 type User = {
-  username: String
+    username: String
 }
 
 type UserState = {
-  user: User
+    user?: User
 }
 
-export class App extends Component<{}, UserState> {
-  readonly state: UserState = {
-    user: {
-      username: 'Unknown'
+stradarClient.registerInterceptor({
+    onErrorResponse(response: Response): void {
+        console.log(`Intercepted error response with status [${response.status}]`)
+        if (response.status === 401) {
+            stradarClient.authClient.redirectToStravaLogin();
+        }
     }
-  };
+});
 
-  // After the component did mount, we set the state each second.
-  async componentDidMount() {
-    const response = await fetch(`/api/user`);
-    const user = await response.json();
-    this.setState({ user });
-  }
+export class App extends Component<{}, UserState> {
+    readonly state: UserState = {};
 
+    async componentDidMount() {
+        const user = await stradarClient.userClient.user();
+        this.setState({user});
+    }
 
-  render() {
-    return (
-        <div className="App">
-          <header className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
-            <p>
-              Current user is {this.state.user.username}
-            </p>
-            <a
-                className="App-link"
-                href="/oauth/login/strava">
-              Login
-            </a>
-          </header>
-        </div>
-    )
-  }
+    render() {
+        const logoutButton = <a className="App-link" href={'/logout'}>Logout</a>
+
+        return (
+            <div className="App">
+                <header className="App-header">
+                    <p>
+                        Current user is {this.state.user ? this.state.user.username : 'Not logged in'}
+                    </p>
+                    {this.state.user ? logoutButton : ''}
+                </header>
+            </div>
+        )
+    }
 }
 
 export default App;
